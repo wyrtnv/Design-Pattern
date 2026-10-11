@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="panel error-panel">
+    <h1>{{ code }}</h1>
+    <p>{{ 'Access denied: ' if code == 403 else '' }}{{ message }}</p>
+    <a class="button" href="{{ url_for('products') }}">Back to products</a>
+</section>
+{% endblock %}

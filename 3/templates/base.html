@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Smart Game Store</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header>
+    <h2 class="logo">🎮 Smart Game Store</h2>
+    {% if session.get('username') %}
+    <nav>
+        <a href="{{ url_for('products') }}">Products</a>
+        <a href="{{ url_for('orders') }}">Orders</a>
+        <span class="user">
+            {{ session['username'] }}
+            <span class="badge {{ session['role'] }}">{{ session['role'] }}</span>
+        </span>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </nav>
+    {% endif %}
+</header>
+
+<main class="container">
+    {% for category, message in get_flashed_messages(with_categories=true) %}
+        <p class="message {{ category }}">{{ message }}</p>
+    {% endfor %}
+
+    {% if login_page %}
+    <section class="panel">
+        <h1>Welcome Back</h1>
+        <form method="POST" action="{{ url_for('login') }}">
+            <label>Username</label>
+            <input name="username" required autofocus>
+            <label>Password</label>
+            <input type="password" name="password" required>
+            <button>Login</button>
+        </form>
+        <p class="hint">Admin: <b>admin</b> / <b>admin123</b></p>
+        <p class="hint">Customer: <b>student</b> / <b>student123</b></p>
+    </section>
+    {% else %}
+        {% block content %}{% endblock %}
+    {% endif %}
+</main>
+</body>
+</html>
