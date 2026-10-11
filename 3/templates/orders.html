@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{{ 'All Orders' if session.get('role') == 'admin' else 'My Orders' }}</h1>
+
+<div class="table-wrap">
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Customer</th>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in orders %}
+        <tr>
+            <td>{{ order.id }}</td>
+            <td>{{ order.customer_name }}</td>
+            <td>{{ order.product_name }}</td>
+            <td>{{ order.quantity }}</td>
+            <td>${{ "%.2f"|format(order.total_price) }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="5">No orders found.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock %}
