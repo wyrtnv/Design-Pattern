@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Online Shop{% endblock %} · Decorator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header>
+    <a class="logo" href="{{ url_for('index') }}">🛍️ Online Shop</a>
+    <nav>
+        <a href="{{ url_for('index') }}">Products</a>
+        <a class="button small" href="{{ url_for('add') }}">+ Add product</a>
+    </nav>
+</header>
+
+<main class="container">
+    {% for category, message in get_flashed_messages(with_categories=true) %}
+        <p class="message {{ category }}">{{ message }}</p>
+    {% endfor %}
+    {% block content %}{% endblock %}
+</main>
+
+<footer>Decorator Pattern · Flask + SQLite</footer>
+</body>
+</html>

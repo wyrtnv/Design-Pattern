@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}{{ product.name }}{% endblock %}
+{% block content %}
+<a href="{{ url_for('index') }}">← All products</a>
+<div class="page-head">
+    <h1>{{ product.name }}</h1>
+    <span class="tag">{{ product.category }}</span>
+</div>
+
+<div class="detail-grid">
+    <section class="panel">
+        <h2>Try the decorators</h2>
+        <p class="hint">Turn wrappers on and off — the <code>Product</code> object stays the same.</p>
+        <form method="GET">
+            <input type="hidden" name="demo" value="1">
+            <label for="discount">DiscountDecorator, %</label>
+            <input id="discount" type="number" name="discount" min="0" max="90" value="{{ discount }}">
+            <label class="check"><input type="checkbox" name="tax" {% if tax %}checked{% endif %}>
+                TaxDecorator (+{{ tax_rate }}%)</label>
+            <label class="check"><input type="checkbox" name="shipping" {% if shipping %}checked{% endif %}>
+                ShippingDecorator (+{{ shipping_cost | money }})</label>
+            <div class="actions">
+                <button>Recalculate</button>
+                <a class="button secondary" href="{{ url_for('detail', product_id=product.id) }}">Reset to saved</a>
+            </div>
+        </form>
+    </section>
+
+    <section class="panel">
+        <h2>Price breakdown</h2>
+        <table class="steps">
+            {% for label, price in component.get_steps() %}
+            <tr><td>{{ label }}</td><td class="num">{{ price | money }}</td></tr>
+            {% endfor %}
+            <tr class="total"><td>Final price</td><td class="num">{{ component.get_price() | money }}</td></tr>
+        </table>
+
+        <h3>Object structure</h3>
+        <div class="chain">
+            {# opens one box per layer, then closes them all -> nested boxes #}
+            {% for name in chain %}<div class="layer {{ 'core' if name == 'Product' }}">{{ name }}{% endfor %}
+            {% for name in chain %}</div>{% endfor %}
+        </div>
+        <p class="hint">Each decorator wraps the one below it. <code>get_price()</code> is called on the
+            outermost wrapper and passes down to <code>Product</code>, every layer adding its own change on the way back.</p>
+    </section>
+</div>
+
+<div class="actions">
+    <a class="button" href="{{ url_for('edit', product_id=product.id) }}">Edit product</a>
+    <form method="POST" action="{{ url_for('delete', product_id=product.id) }}"
+          onsubmit="return confirm('Delete {{ product.name }}?')">
+        <button class="danger">Delete</button>
+    </form>
+</div>
+{% endblock %}

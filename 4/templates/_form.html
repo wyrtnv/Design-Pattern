@@ -1,0 +1,36 @@
+<form method="POST" class="panel form" novalidate>
+    <label for="name">Name</label>
+    <input id="name" name="name" maxlength="100" required value="{{ product.name if product else '' }}">
+
+    <label for="category">Category</label>
+    <select id="category" name="category" required>
+        <option value="">— choose —</option>
+        {% for c in categories %}
+        <option {% if product and product.category == c %}selected{% endif %}>{{ c }}</option>
+        {% endfor %}
+    </select>
+
+    <label for="price">Base price, ₸</label>
+    <input id="price" name="price" type="number" min="1" step="any" required
+           value="{{ product.price | plain if product else '' }}">
+
+    <fieldset>
+        <legend>Decorators applied to this product</legend>
+        <label for="discount">DiscountDecorator, %</label>
+        <input id="discount" name="discount" type="number" min="0" max="90"
+               value="{{ product.discount if product else 0 }}">
+        <label class="check">
+            <input type="checkbox" name="apply_tax" {% if product and product.apply_tax %}checked{% endif %}>
+            TaxDecorator (VAT +12%)
+        </label>
+        <label class="check">
+            <input type="checkbox" name="apply_shipping" {% if product and product.apply_shipping %}checked{% endif %}>
+            ShippingDecorator (+1 500 ₸)
+        </label>
+    </fieldset>
+
+    <div class="actions">
+        <button>{{ submit }}</button>
+        <a class="button secondary" href="{{ url_for('index') }}">Cancel</a>
+    </div>
+</form>

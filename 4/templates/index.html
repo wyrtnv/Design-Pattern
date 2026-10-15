@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Products{% endblock %}
+{% block content %}
+<div class="page-head">
+    <h1>Products</h1>
+    <p class="hint">Final price = base price wrapped in Discount → Tax → Shipping decorators.</p>
+</div>
+
+{% if products %}
+<div class="table-wrap">
+<table>
+    <thead>
+    <tr>
+        <th>ID</th><th>Name</th><th>Category</th><th>Decorators</th>
+        <th class="num">Base price</th><th class="num">Final price</th><th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for row, component in products %}
+    <tr>
+        <td>{{ row.id }}</td>
+        <td><a href="{{ url_for('detail', product_id=row.id) }}">{{ row.name }}</a></td>
+        <td><span class="tag">{{ row.category }}</span></td>
+        <td><div class="chips">
+            {% if row.discount %}<span class="chip discount">−{{ row.discount }}%</span>{% endif %}
+            {% if row.apply_tax %}<span class="chip tax">Tax</span>{% endif %}
+            {% if row.apply_shipping %}<span class="chip shipping">Shipping</span>{% endif %}
+            {% if not (row.discount or row.apply_tax or row.apply_shipping) %}<span class="muted">—</span>{% endif %}
+        </div></td>
+        <td class="num muted">{{ row.price | money }}</td>
+        <td class="num final">{{ component.get_price() | money }}</td>
+        <td><div class="row-actions">
+            <a class="button small secondary" href="{{ url_for('detail', product_id=row.id) }}">View</a>
+            <a class="button small secondary" href="{{ url_for('edit', product_id=row.id) }}">Edit</a>
+            <form method="POST" action="{{ url_for('delete', product_id=row.id) }}"
+                  onsubmit="return confirm('Delete {{ row.name }}?')">
+                <button class="small danger">Delete</button>
+            </form>
+        </div></td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+{% else %}
+<section class="panel center">
+    <p>No products yet.</p>
+    <a class="button" href="{{ url_for('add') }}">Add the first product</a>
+</section>
+{% endif %}
+{% endblock %}

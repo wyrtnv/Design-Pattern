@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Not found{% endblock %}
+{% block content %}
+<section class="panel center">
+    <h1 class="code">404</h1>
+    <p>{{ message }}</p>
+    <a class="button" href="{{ url_for('index') }}">Back to products</a>
+</section>
+{% endblock %}
