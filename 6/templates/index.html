@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Payment Aggregator API</title>
+    <style>
+        body { margin: 0; font-family: -apple-system, "Segoe UI", Arial, sans-serif; background: #f5f6fa; color: #1f2333; }
+        main { max-width: 960px; margin: 30px auto; padding: 0 16px; }
+        h1 { margin: 0 0 4px; }
+        .hint { color: #6b7185; margin: 0 0 20px; }
+        .grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 20px; align-items: start; }
+        .panel { background: #fff; border: 1px solid #e1e4ed; border-radius: 12px; padding: 20px; }
+        form { display: grid; gap: 10px; }
+        label { font-weight: 600; font-size: 14px; }
+        input, select { padding: 10px; border: 1px solid #e1e4ed; border-radius: 8px; font-size: 15px; }
+        button { padding: 10px 16px; background: #4f5bd5; color: #fff; border: none; border-radius: 8px; font-size: 15px; cursor: pointer; }
+        button.secondary { background: #eef0f6; color: #1f2333; }
+        pre { background: #1f2333; color: #d7f5d0; padding: 14px; border-radius: 8px; white-space: pre-wrap; word-break: break-word; font-size: 13px; min-height: 120px; margin: 0; }
+        .row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+        code { background: #eef0f6; padding: 1px 5px; border-radius: 4px; }
+        @media (max-width: 760px) { .grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+<main>
+    <h1>💳 Payment Aggregator API</h1>
+    <p class="hint">Lab 6 · Factory Method + Singleton · Flask + SQLAlchemy + SQLite</p>
+
+    <div class="grid">
+        <section class="panel">
+            <h2>POST <code>/api/pay</code></h2>
+            <form id="pay-form">
+                <label for="method">Method (factory input)</label>
+                <select id="method">
+                    <option value="paypal">paypal → PayPalPayment</option>
+                    <option value="stripe">stripe → StripePayment</option>
+                    <option value="crypto">crypto → CryptoWalletPayment</option>
+                    <option value="applepay">applepay → (unsupported)</option>
+                </select>
+                <label for="payer">Payer</label>
+                <input id="payer" value="Alibi">
+                <label for="amount">Amount, $</label>
+                <input id="amount" value="100">
+                <button>Send payment</button>
+            </form>
+        </section>
+
+        <section class="panel">
+            <h2>GET requests</h2>
+            <div class="row">
+                <button class="secondary" data-url="/api/payments">/api/payments</button>
+                <button class="secondary" data-url="/api/payments/1">/api/payments/1</button>
+                <button class="secondary" data-url="/api/singleton-check">/api/singleton-check</button>
+            </div>
+            <h3 id="status">Response</h3>
+            <pre id="output">Click a button…</pre>
+        </section>
+    </div>
+</main>
+
+<script>
+    const output = document.getElementById("output");
+    const status = document.getElementById("status");
+
+    async function show(response) {
+        const body = await response.json();
+        status.textContent = `Response: ${response.status} ${response.statusText}`;
+        output.textContent = JSON.stringify(body, null, 2);
+    }
+
+    document.getElementById("pay-form").addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const response = await fetch("/api/pay", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                method: document.getElementById("method").value,
+                payer: document.getElementById("payer").value,
+                amount: document.getElementById("amount").value,
+            }),
+        });
+        show(response);
+    });
+
+    document.querySelectorAll("[data-url]").forEach((button) => {
+        button.addEventListener("click", async () => show(await fetch(button.dataset.url)));
+    });
+</script>
+</body>
+</html>
