@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit' if product else 'Add' }} product{% endblock %}
+{% block content %}
+<a href="{{ url_for('admin.products') }}" class="back">← Back to products</a>
+<section class="panel medium">
+    <h1>{{ 'Edit product' if product else 'Add product' }}</h1>
+    {% macro val(field, default='') %}{{ form.get(field) if form.get(field) is not none else (product[field] if product else default) }}{% endmacro %}
+    <form method="POST" class="form-grid">
+        <input type="hidden" name="_csrf" value="{{ csrf_token }}">
+        <label class="span2">Name <input name="name" value="{{ val('name') }}" maxlength="100" required></label>
+        <label>Category
+            <select name="category_id" required>
+                {% for c in categories %}
+                <option value="{{ c.id }}" {{ 'selected' if val('category_id')|string == c.id|string }}>{{ c.name }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <label>Icon (emoji) <input name="icon" value="{{ val('icon', '🎮') }}" maxlength="4"></label>
+        <label>Price, ₸ <input type="number" name="price" min="0" step="1" value="{{ val('price') }}" required></label>
+        <label>Stock <input type="number" name="stock" min="0" value="{{ val('stock', 0) }}" required></label>
+        <label class="span2">Description <textarea name="description" rows="3">{{ val('description') }}</textarea></label>
+        <button class="btn span2">Save product</button>
+    </form>
+</section>
+{% endblock %}

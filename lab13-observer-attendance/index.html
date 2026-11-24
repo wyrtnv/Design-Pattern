@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Attendance System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Student Attendance System</h1>
+        <p class="subtitle">Event-Driven Application with Observer Pattern</p>
+
+        <!-- Add Student -->
+        <div class="form-section">
+            <input
+                type="text"
+                id="studentName"
+                placeholder="Enter student name"
+                autocomplete="off"
+            >
+            <button id="addStudentBtn">
+                Add Student
+            </button>
+        </div>
+
+        <!-- Attendance Statistics (StatisticsDisplay observer) -->
+        <div class="statistics">
+            <div class="stat-box stat-total">
+                <h3>Total Students</h3>
+                <span id="totalCount">0</span>
+            </div>
+            <div class="stat-box stat-present">
+                <h3>Present</h3>
+                <span id="presentCount">0</span>
+            </div>
+            <div class="stat-box stat-absent">
+                <h3>Absent</h3>
+                <span id="absentCount">0</span>
+            </div>
+        </div>
+
+        <!-- Student List (StudentListDisplay observer) -->
+        <h2>Student List</h2>
+        <div id="studentList"></div>
+
+        <!-- Notification (NotificationDisplay observer) -->
+        <div id="notification" role="status"></div>
+
+        <!-- EXTENSION: Event Log (EventLogDisplay observer) -->
+        <section class="event-log">
+            <h2>Event Log <span class="badge-ext">extension</span></h2>
+            <p class="hint">Fourth observer, subscribed without changing AttendanceManager.</p>
+            <ol id="eventLog"></ol>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

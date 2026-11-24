@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Notifications{% endblock %}
+{% block content %}
+<h1>🔔 Notifications <span class="pattern">Observer</span></h1>
+{% for n in notifications %}
+    <div class="notice {{ 'unread' if not n.is_read }}">
+        <span>{{ n.message }}</span>
+        <small>{{ n.created_at[:16] }}{% if n.order_id %} · <a href="{{ url_for('orders.detail', order_id=n.order_id) }}">order #{{ n.order_id }}</a>{% endif %}</small>
+    </div>
+{% else %}
+    <p class="empty">No notifications yet.</p>
+{% endfor %}
+{% endblock %}

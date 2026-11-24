@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Catalog{% endblock %}
+{% block content %}
+<section class="hero">
+    <div>
+        <h1>Level up your setup</h1>
+        <p>Laptops, keyboards, mice, headsets and monitors — delivered across Almaty.</p>
+    </div>
+</section>
+
+<form class="filters" method="GET">
+    <input name="q" value="{{ q }}" placeholder="Search products…">
+    <select name="category">
+        <option value="">All categories</option>
+        {% for c in categories %}
+            <option value="{{ c.id }}" {{ 'selected' if c.id == category_id }}>{{ c.name }} ({{ c.product_count }})</option>
+        {% endfor %}
+    </select>
+    <select name="sort">
+        <option value="new" {{ 'selected' if sort == 'new' }}>Newest</option>
+        <option value="price_asc" {{ 'selected' if sort == 'price_asc' }}>Price ↑</option>
+        <option value="price_desc" {{ 'selected' if sort == 'price_desc' }}>Price ↓</option>
+        <option value="name" {{ 'selected' if sort == 'name' }}>Name A–Z</option>
+    </select>
+    <button class="btn">Apply</button>
+</form>
+
+<div class="grid">
+    {% for p in products %}
+    <article class="card">
+        <a href="{{ url_for('shop.product', product_id=p.id) }}" class="card-img">{{ p.icon }}</a>
+        <span class="tag">{{ p.category_name }}</span>
+        <h2><a href="{{ url_for('shop.product', product_id=p.id) }}">{{ p.name }}</a></h2>
+        <p class="muted small">{{ p.description }}</p>
+        <div class="card-foot">
+            <span class="price">{{ p.price|money }}</span>
+            {% if p.in_stock %}
+                <form method="POST" action="{{ url_for('shop.add_to_cart', product_id=p.id) }}">
+                    <input type="hidden" name="_csrf" value="{{ csrf_token }}">
+                    <button class="btn small">+ Cart</button>
+                </form>
+            {% else %}
+                <span class="stock out">Sold out</span>
+            {% endif %}
+        </div>
+        <span class="stock {{ 'low' if p.stock <= 3 }}">{{ p.stock }} in stock</span>
+    </article>
+    {% else %}
+        <p class="empty">Nothing found. Try another search.</p>
+    {% endfor %}
+</div>
+{% endblock %}

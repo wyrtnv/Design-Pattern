@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Admin{% endblock %}
+{% block content %}
+<h1>Dashboard</h1>
+<div class="stats">
+    <div class="stat"><span>Orders</span><b>{{ stats.orders }}</b></div>
+    <div class="stat"><span>Revenue</span><b>{{ stats.revenue|money }}</b></div>
+    <div class="stat"><span>Products</span><b>{{ product_count }}</b></div>
+    <div class="stat warn"><span>Low stock (≤ 3)</span><b>{{ low_stock|length }}</b></div>
+</div>
+
+<div class="two-col">
+    <section class="panel">
+        <h2>Recent orders</h2>
+        {% for o in recent %}
+            <div class="line"><a href="{{ url_for('orders.detail', order_id=o.id) }}">#{{ o.id }} · {{ o.customer_name }}</a>
+                <span><span class="status {{ o.status|lower }}">{{ o.status }}</span> {{ o.total|money }}</span></div>
+        {% else %}<p class="muted">No orders yet.</p>{% endfor %}
+    </section>
+    <section class="panel">
+        <h2>Low stock</h2>
+        {% for p in low_stock %}
+            <div class="line"><a href="{{ url_for('admin.edit_product', product_id=p.id) }}">{{ p.icon }} {{ p.name }}</a><span class="stock low">{{ p.stock }} left</span></div>
+        {% else %}<p class="muted">All products are well stocked.</p>{% endfor %}
+    </section>
+</div>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Order #{{ order.id }}{% endblock %}
+{% block content %}
+<a href="{{ url_for('admin.orders') if user.is_admin else url_for('orders.my_orders') }}" class="back">← Back to orders</a>
+<div class="page-head">
+    <h1>Order #{{ order.id }} <span class="status {{ order.status|lower }}">{{ order.status }}</span></h1>
+    {% if order.can_cancel and order.user_id == user.id %}
+    <form method="POST" action="{{ url_for('orders.cancel', order_id=order.id) }}" onsubmit="return confirm('Cancel this order?');">
+        <input type="hidden" name="_csrf" value="{{ csrf_token }}">
+        <button class="btn danger">Cancel order</button>
+    </form>
+    {% endif %}
+</div>
+
+<ol class="timeline">
+    {% set steps = ['NEW', 'PAID', 'SHIPPED', 'DELIVERED'] %}
+    {% for s in steps %}
+        <li class="{{ 'done' if order.status != 'CANCELLED' and steps.index(order.status) >= loop.index0 }}">{{ s }}</li>
+    {% endfor %}
+</ol>
+
+<div class="two-col">
+    <section class="panel">
+        <h2>Items</h2>
+        {% for i in order.items %}
+            <div class="line"><span>{{ i.icon }} {{ i.product_name }} × {{ i.quantity }}</span><span>{{ i.line_total|money }}</span></div>
+        {% endfor %}
+        <hr>
+        <div class="line"><span>Subtotal</span><span>{{ order.subtotal|money }}</span></div>
+        <div class="line"><span>Delivery ({{ order.delivery_method }})</span><span>{{ order.delivery_cost|money if order.delivery_cost else 'Free' }}</span></div>
+        <div class="line total"><span>Total</span><span>{{ order.total|money }}</span></div>
+    </section>
+    <section class="panel">
+        <h2>Details</h2>
+        <p><span class="muted">Customer:</span> {{ order.customer_name }}</p>
+        <p><span class="muted">Created:</span> {{ order.created_at }}</p>
+        <p><span class="muted">Address:</span> {{ order.address or 'Pickup from store' }}</p>
+        {% if order.payment %}
+        <h2>Payment</h2>
+        <p><span class="muted">Method:</span> {{ order.payment.method }}</p>
+        <p><span class="muted">Transaction:</span> <code>{{ order.payment.transaction_id }}</code></p>
+        <p><span class="muted">Provider fee:</span> {{ order.payment.fee|money }}</p>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}

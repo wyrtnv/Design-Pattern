@@ -24,7 +24,7 @@
 ## 2. Структура проекта
 
 ```
-4/
+rk1-decorator-online-shop/
 ├── README.md             этот отчёт
 ├── app.py                Flask-приложение: маршруты CRUD, валидация, обработка ошибок
 ├── database.py           SQLite: создание таблицы, демо-данные, функции CRUD
@@ -47,7 +47,7 @@
 ## 3. Как запустить
 
 ```bash
-cd ~/Desktop/"Design Pattern/4"
+cd ~/Desktop/"Design Pattern/rk1-decorator-online-shop"
 python3 -m venv .venv                         # только в первый раз
 .venv/bin/pip install -r requirements.txt     # только в первый раз
 .venv/bin/python app.py

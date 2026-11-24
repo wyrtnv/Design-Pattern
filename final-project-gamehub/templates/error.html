@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Error {{ code }}{% endblock %}
+{% block content %}
+<section class="panel narrow center">
+    <div class="err-code">{{ code }}</div>
+    <h1>{{ {400: 'Bad request', 403: 'Access denied', 404: 'Not found'}[code] }}</h1>
+    <p class="muted">{{ error.description }}</p>
+    <a href="{{ url_for('shop.catalog') }}" class="btn">Back to catalog</a>
+</section>
+{% endblock %}

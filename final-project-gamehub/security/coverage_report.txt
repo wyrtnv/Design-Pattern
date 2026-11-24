@@ -1,0 +1,26 @@
+Name                              Stmts   Miss  Cover
+-----------------------------------------------------
+app.py                               49      2    96%
+controllers/__init__.py               0      0   100%
+controllers/admin_controller.py     113     50    56%
+controllers/auth_controller.py       43     16    63%
+controllers/helpers.py               36      1    97%
+controllers/order_controller.py      37     13    65%
+controllers/shop_controller.py       68     14    79%
+models/__init__.py                    0      0   100%
+models/entities.py                   41      0   100%
+patterns/__init__.py                  0      0   100%
+patterns/delivery_strategy.py        46      0   100%
+patterns/order_observer.py           60      0   100%
+patterns/payment_adapters.py         61      3    95%
+patterns/payment_factory.py          16      0   100%
+patterns/singleton_database.py       42      0   100%
+repositories/__init__.py              0      0   100%
+repositories/repositories.py        139      6    96%
+services/__init__.py                  0      0   100%
+services/auth_service.py             23      1    96%
+services/cart_service.py             43     15    65%
+services/catalog_service.py          68      8    88%
+services/order_service.py            78     11    86%
+-----------------------------------------------------
+TOTAL                               963    140    85%

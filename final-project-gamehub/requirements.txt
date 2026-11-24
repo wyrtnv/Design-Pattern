@@ -1,0 +1,5 @@
+flask>=3.0
+
+# development tools
+coverage>=7.0
+bandit>=1.7

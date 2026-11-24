@@ -1,0 +1,335 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f7fb;
+    margin: 0;
+    padding: 30px;
+    color: #1e293b;
+}
+
+.container {
+    max-width: 850px;
+    margin: auto;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+h1 {
+    color: #243b53;
+    text-align: center;
+    margin: 0 0 6px;
+}
+
+h2 {
+    color: #243b53;
+    font-size: 20px;
+    margin: 0 0 14px;
+}
+
+p {
+    text-align: center;
+    color: #666;
+}
+
+.subtitle {
+    margin: 0;
+}
+
+/* ---------- Add student form ---------- */
+.form-section {
+    display: flex;
+    gap: 10px;
+    margin: 25px 0;
+}
+
+input {
+    flex: 1;
+    min-width: 0;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 15px;
+}
+
+input:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.18);
+}
+
+button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    color: white;
+    background: #2563eb;
+    font-size: 14px;
+    transition: opacity 0.15s, transform 0.1s;
+}
+
+button:hover {
+    opacity: 0.85;
+}
+
+button:active {
+    transform: scale(0.97);
+}
+
+/* ---------- Statistics ---------- */
+.statistics {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.stat-box {
+    flex: 1;
+    background: #eaf2ff;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    border-top: 4px solid #2563eb;
+}
+
+.stat-box h3 {
+    font-size: 15px;
+    margin: 0 0 8px;
+    color: #475569;
+}
+
+.stat-box span {
+    font-size: 28px;
+    font-weight: bold;
+    color: #1d4ed8;
+}
+
+.stat-present {
+    background: #ecfdf3;
+    border-top-color: #16a34a;
+}
+
+.stat-present span {
+    color: #15803d;
+}
+
+.stat-absent {
+    background: #fef2f2;
+    border-top-color: #dc2626;
+}
+
+.stat-absent span {
+    color: #b91c1c;
+}
+
+/* ---------- Student list ---------- */
+.student {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    padding: 15px;
+    margin-bottom: 10px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-left: 5px solid #94a3b8;
+    border-radius: 8px;
+}
+
+.student.is-present {
+    border-left-color: #16a34a;
+}
+
+.student.is-absent {
+    border-left-color: #dc2626;
+}
+
+.student-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+}
+
+.student-actions {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.empty {
+    color: #94a3b8;
+    font-style: italic;
+    padding: 12px 0;
+}
+
+/* Status badges */
+.status-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 0.3px;
+}
+
+.status-pending {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.status-present {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.status-absent {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+/* Action buttons */
+.present {
+    background: #16a34a;
+}
+
+.absent {
+    background: #dc2626;
+}
+
+.delete {
+    background: #64748b;
+}
+
+/* The button of the current status is highlighted, the other one is faded */
+.student-actions button.active {
+    box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.25);
+    font-weight: bold;
+}
+
+.student.is-present .absent,
+.student.is-absent .present {
+    opacity: 0.55;
+}
+
+.student.is-present .absent:hover,
+.student.is-absent .present:hover {
+    opacity: 0.85;
+}
+
+/* ---------- Notification ---------- */
+#notification {
+    margin-top: 20px;
+    padding: 12px;
+    background: #dcfce7;
+    color: #166534;
+    border-radius: 6px;
+    border-left: 5px solid #16a34a;
+    display: none;
+    opacity: 1;
+    transition: opacity 0.6s ease;
+}
+
+#notification.fade-out {
+    opacity: 0;
+}
+
+#notification.type-studentDeleted {
+    background: #f1f5f9;
+    color: #334155;
+    border-left-color: #64748b;
+}
+
+#notification.type-absent {
+    background: #fee2e2;
+    color: #991b1b;
+    border-left-color: #dc2626;
+}
+
+/* ---------- EXTENSION: event log ---------- */
+.event-log {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px dashed #cbd5e1;
+}
+
+.event-log .hint {
+    text-align: left;
+    font-size: 13px;
+    margin: -6px 0 12px;
+}
+
+.badge-ext {
+    font-size: 11px;
+    font-weight: normal;
+    vertical-align: middle;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: #ede9fe;
+    color: #5b21b6;
+}
+
+#eventLog {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    max-height: 220px;
+    overflow-y: auto;
+    font-family: Menlo, Consolas, monospace;
+    font-size: 13px;
+    background: #0f172a;
+    color: #e2e8f0;
+    border-radius: 8px;
+}
+
+#eventLog li {
+    padding: 7px 12px;
+    border-bottom: 1px solid #1e293b;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+#eventLog li:last-child {
+    border-bottom: none;
+}
+
+#eventLog .log-time {
+    color: #64748b;
+}
+
+#eventLog .log-type {
+    color: #7dd3fc;
+}
+
+#eventLog .log-empty {
+    color: #64748b;
+    font-style: italic;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 600px) {
+    body {
+        padding: 12px;
+    }
+
+    .container {
+        padding: 18px;
+    }
+
+    .form-section,
+    .statistics,
+    .student {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .student-actions button {
+        flex: 1;
+    }
+}

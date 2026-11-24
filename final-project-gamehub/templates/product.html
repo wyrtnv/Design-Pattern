@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}{{ product.name }}{% endblock %}
+{% block content %}
+<a href="{{ url_for('shop.catalog') }}" class="back">← Back to catalog</a>
+<section class="product-page">
+    <div class="product-img">{{ product.icon }}</div>
+    <div>
+        <span class="tag">{{ product.category_name }}</span>
+        <h1>{{ product.name }}</h1>
+        <p class="muted">{{ product.description }}</p>
+        <p class="price big">{{ product.price|money }}</p>
+        <p class="stock {{ 'low' if product.stock <= 3 }} {{ 'out' if not product.in_stock }}">
+            {{ product.stock }} in stock</p>
+        {% if product.in_stock %}
+        <form method="POST" action="{{ url_for('shop.add_to_cart', product_id=product.id) }}" class="row">
+            <input type="hidden" name="_csrf" value="{{ csrf_token }}">
+            <input type="number" name="quantity" value="1" min="1" max="{{ product.stock }}" class="qty">
+            <button class="btn">Add to cart</button>
+        </form>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

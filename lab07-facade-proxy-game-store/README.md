@@ -18,7 +18,7 @@ Smart Game Store — веб-приложение интернет-магазин
 ## 2. Структура проекта
 
 ```
-3/
+lab07-facade-proxy-game-store/
 ├── README.md           этот отчёт
 ├── app.py              Flask-приложение: маршруты (routes), вход, обработка ошибок
 ├── patterns.py         паттерны Proxy (ProductProxy) и Facade (OrderFacade)
@@ -38,7 +38,7 @@ Smart Game Store — веб-приложение интернет-магазин
 ## 3. Как запустить
 
 ```bash
-cd ~/Desktop/"Design Pattern/3"
+cd ~/Desktop/"Design Pattern/lab07-facade-proxy-game-store"
 python3 -m venv .venv                         # только в первый раз
 .venv/bin/pip install -r requirements.txt     # только в первый раз
 .venv/bin/python app.py

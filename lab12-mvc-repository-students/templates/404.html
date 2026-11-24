@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="not-found">
+    <h2>404 — Student not found</h2>
+    <p class="muted">The requested student does not exist or has already been deleted.</p>
+    <a href="{{ url_for('student.students') }}" class="btn btn-primary">Back to Student List</a>
+</div>
+
+{% endblock %}

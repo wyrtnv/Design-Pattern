@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}My orders{% endblock %}
+{% block content %}
+<h1>My orders</h1>
+{% if orders %}
+<div class="table-wrap">
+<table>
+    <thead><tr><th>#</th><th>Date</th><th>Items</th><th>Delivery</th><th>Total</th><th>Status</th><th></th></tr></thead>
+    <tbody>
+    {% for o in orders %}
+    <tr>
+        <td>#{{ o.id }}</td>
+        <td>{{ o.created_at[:16] }}</td>
+        <td>{% for i in o.items %}{{ i.icon }}{% endfor %} {{ o.items|length }} item(s)</td>
+        <td>{{ o.delivery_method|capitalize }}</td>
+        <td><b>{{ o.total|money }}</b></td>
+        <td><span class="status {{ o.status|lower }}">{{ o.status }}</span></td>
+        <td><a href="{{ url_for('orders.detail', order_id=o.id) }}">Details →</a></td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+{% else %}
+<p class="empty">No orders yet. <a href="{{ url_for('shop.catalog') }}">Start shopping</a></p>
+{% endif %}
+{% endblock %}

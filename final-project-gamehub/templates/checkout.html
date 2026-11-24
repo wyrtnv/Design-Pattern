@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Checkout{% endblock %}
+{% block content %}
+<h1>Checkout</h1>
+<form method="POST" class="checkout">
+    <input type="hidden" name="_csrf" value="{{ csrf_token }}">
+    <div>
+        <h2>1. Delivery <span class="pattern">Strategy</span></h2>
+        <div class="options">
+            {% for s in strategies %}
+            <label class="option">
+                <input type="radio" name="delivery" value="{{ s.code }}" {{ 'checked' if s.code == selected_delivery }}>
+                <span><b>{{ s.title }}</b><small>{{ s.eta }}</small></span>
+                <em>{{ quotes[s.code].delivery|money if quotes[s.code].delivery else 'Free' }}</em>
+            </label>
+            {% endfor %}
+        </div>
+        <label>Delivery address <small class="muted">(not needed for pickup)</small>
+            <input name="address" value="{{ address }}" placeholder="Almaty, Abay Ave 10, apt 5">
+        </label>
+
+        <h2>2. Payment <span class="pattern">Factory Method + Adapter</span></h2>
+        <div class="options">
+            {% for code, title, fee in payments %}
+            <label class="option">
+                <input type="radio" name="payment" value="{{ code }}" {{ 'checked' if code == selected_payment }}>
+                <span><b>{{ title }}</b><small>provider fee {{ fee }}%</small></span>
+            </label>
+            {% endfor %}
+        </div>
+    </div>
+
+    <aside class="panel">
+        <h2>Order summary</h2>
+        {% for i in items %}
+            <div class="line"><span>{{ i.icon }} {{ i.product_name }} × {{ i.quantity }}</span><span>{{ i.line_total|money }}</span></div>
+        {% endfor %}
+        <hr>
+        {% set q = quotes[selected_delivery] if selected_delivery in quotes else quotes['courier'] %}
+        <div class="line"><span>Subtotal</span><span>{{ q.subtotal|money }}</span></div>
+        <div class="line muted"><span>Delivery</span><span>depends on option</span></div>
+        <table class="mini">
+            {% for s in strategies %}<tr><td>{{ s.title }}</td><td>{{ quotes[s.code].total|money }}</td></tr>{% endfor %}
+        </table>
+        <button class="btn wide">Pay &amp; place order</button>
+    </aside>
+</form>
+{% endblock %}

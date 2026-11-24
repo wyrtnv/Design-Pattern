@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="page-header">
+    <div>
+        <h2>Student List</h2>
+        <p class="muted">Total students: <strong>{{ students|length }}</strong></p>
+    </div>
+
+    <a href="{{ url_for('student.add_student') }}"
+       class="btn btn-primary">
+        + Add Student
+    </a>
+</div>
+
+<div class="table-wrap">
+<table class="students-table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Full Name</th>
+            <th>Group</th>
+            <th>Email</th>
+            <th>Phone Number</th>
+            <th class="actions-col">Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        {% for student in students %}
+
+        <tr>
+            <td class="id-cell">#{{ student.id }}</td>
+            <td class="name-cell">{{ student.name }}</td>
+            <td><span class="badge">{{ student.group }}</span></td>
+            <td><a class="mail" href="mailto:{{ student.email }}">{{ student.email }}</a></td>
+            <td class="phone-cell">{{ student.phone or '—' }}</td>
+
+            <td class="actions-col">
+                <a class="btn btn-edit"
+                   href="{{ url_for('student.edit_student', student_id=student.id) }}">
+                    Edit
+                </a>
+
+                <form method="POST"
+                      class="inline-form"
+                      action="{{ url_for('student.delete_student', student_id=student.id) }}"
+                      onsubmit="return confirm('Delete this student?');">
+
+                    <button type="submit"
+                            class="btn btn-delete">
+                        Delete
+                    </button>
+
+                </form>
+            </td>
+        </tr>
+
+        {% else %}
+
+        <tr>
+            <td colspan="6" class="empty">
+                No students found.
+            </td>
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+</table>
+</div>
+
+{% endblock %}

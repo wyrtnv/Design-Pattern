@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+{% block content %}
+<section class="panel narrow">
+    <h1>Welcome back</h1>
+    <p class="muted">Log in to place orders and track them.</p>
+    <form method="POST">
+        <input type="hidden" name="_csrf" value="{{ csrf_token }}">
+        <label>Username <input name="username" value="{{ request.form.get('username', '') }}" required autofocus></label>
+        <label>Password <input type="password" name="password" required></label>
+        <button class="btn">Log in</button>
+    </form>
+    <div class="demo">
+        <b>Demo accounts</b>
+        <span>Admin: <code>admin</code> / <code>admin123</code></span>
+        <span>Customer: <code>student</code> / <code>student123</code></span>
+    </div>
+    <p class="muted">No account? <a href="{{ url_for('auth.register') }}">Sign up</a></p>
+</section>
+{% endblock %}
