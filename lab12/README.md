@@ -29,7 +29,7 @@ Service → Repository → Database) и как паттерн **Repository** о�
 ## 2. Структура проекта
 
 ```
-lab12-mvc-repository-students/
+lab12/
 ├── README.md                     этот отчёт
 ├── app.py                        точка входа: создаёт Flask, регистрирует Blueprint, страница 404
 ├── database.py                   подключение к SQLite, создание/миграция таблицы, демо-данные
@@ -60,7 +60,7 @@ lab12-mvc-repository-students/
 ## 3. Как запустить
 
 ```bash
-cd ~/Desktop/"Design Pattern/lab12-mvc-repository-students"
+cd ~/Desktop/"Design Pattern/lab12"
 python3 -m venv .venv                         # только в первый раз
 .venv/bin/pip install -r requirements.txt     # только в первый раз
 .venv/bin/python app.py

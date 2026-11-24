@@ -25,7 +25,7 @@
 ## 2. Структура проекта
 
 ```
-lab06-singleton-factory-payments/
+lab06/
 ├── app.py              Flask-приложение и маршруты REST API
 ├── database.py         SINGLETON: DatabaseManager
 ├── factory.py          FACTORY METHOD: PaymentFactory и платёжные сервисы
@@ -40,7 +40,7 @@ lab06-singleton-factory-payments/
 ## 3. Как запустить
 
 ```bash
-cd ~/Desktop/"Design Pattern/lab06-singleton-factory-payments"
+cd ~/Desktop/"Design Pattern/lab06"
 python3 -m venv .venv                         # только в первый раз
 .venv/bin/pip install -r requirements.txt     # только в первый раз
 .venv/bin/python app.py

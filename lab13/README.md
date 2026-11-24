@@ -27,7 +27,7 @@ Student Attendance System — небольшое веб-приложение д�
 ## 2. Структура проекта
 
 ```
-lab13-observer-attendance/
+lab13/
 ├── README.md       этот отчёт
 ├── index.html      структура страницы: поле ввода, статистика, список, уведомление, журнал
 ├── style.css       стили: карточки, бейджи статусов, анимация уведомления, адаптивность
@@ -45,7 +45,7 @@ lab13-observer-attendance/
 Установка и сервер не нужны — достаточно открыть `index.html` в браузере:
 
 ```bash
-open ~/Desktop/"Design Pattern/lab13-observer-attendance/index.html"
+open ~/Desktop/"Design Pattern/lab13/index.html"
 ```
 
 Или двойной щелчок по `index.html` в Finder. Сообщения `Event received: ...` видны в консоли

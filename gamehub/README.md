@@ -23,12 +23,12 @@ GameHub — веб-магазин игровой техники: ноутбук�
 информирование клиента собраны в одном приложении. Новый способ оплаты, новый тариф доставки
 или новый канал уведомлений добавляется **новым классом**, без переписывания старого кода.
 
-Техническое задание (шаблон кафедры): [docs/Technical_Specification_GameHub.docx](docs/Technical_Specification_GameHub.docx).
+Техническое задание (шаблон кафедры): [docs/spec.docx](docs/spec.docx).
 
 ## 2. Структура проекта
 
 ```
-final-project-gamehub/
+gamehub/
 ├── README.md                этот отчёт
 ├── app.py                   точка входа: create_app(), сборка паттернов, CSRF, ошибки
 ├── seed.py                  создание схемы и демо-данных (пользователи с хэшами паролей)
@@ -69,7 +69,7 @@ final-project-gamehub/
 ## 3. Как запустить
 
 ```bash
-cd ~/Desktop/"Design Pattern/final-project-gamehub"
+cd ~/Desktop/"Design Pattern/gamehub"
 python3 -m venv .venv                         # только в первый раз
 .venv/bin/pip install -r requirements.txt     # только в первый раз
 .venv/bin/python app.py

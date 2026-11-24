@@ -14,13 +14,13 @@ LOG_DIR="$ROOT/.run-logs"
 
 # папка | порт | название
 PROJECTS=(
-  "lab07-facade-proxy-game-store|5001|Lab 7 — Smart Game Store (Facade + Proxy)"
-  "rk1-decorator-online-shop|5002|РК 1 — Online Shop (Decorator)"
-  "lab06-singleton-factory-payments|5003|Lab 6 — Payment Aggregator (Singleton + Factory Method)"
-  "lab12-mvc-repository-students|5004|Lab 12 — Student Management (MVC + Repository)"
-  "final-project-gamehub|5005|GameHub — итоговый проект"
+  "lab07|5001|Lab 7 — Smart Game Store (Facade + Proxy)"
+  "rk1|5002|РК 1 — Online Shop (Decorator)"
+  "lab06|5003|Lab 6 — Payment Aggregator (Singleton + Factory Method)"
+  "lab12|5004|Lab 12 — Student Management (MVC + Repository)"
+  "gamehub|5005|GameHub — итоговый проект"
 )
-STATIC_PAGE="$ROOT/lab13-observer-attendance/index.html"
+STATIC_PAGE="$ROOT/lab13/index.html"
 
 port_pids() { lsof -ti tcp:"$1" -sTCP:LISTEN 2>/dev/null; }
 
@@ -59,12 +59,13 @@ start_all() {
       python3 -m venv "$path/.venv" || { echo "  ошибка: не удалось создать .venv"; continue; }
     fi
     check="import flask"
-    [ "$dir" = "lab06-singleton-factory-payments" ] && check="import flask, flask_sqlalchemy"
+    [ "$dir" = "lab06" ] && check="import flask, flask_sqlalchemy"
     if ! "$path/.venv/bin/python" -c "$check" 2>/dev/null; then
       echo "Ставлю зависимости для $dir ..."
       "$path/.venv/bin/pip" install -q -r "$path/requirements.txt" || { echo "  ошибка установки"; continue; }
     fi
-    (cd "$path" && nohup .venv/bin/python app.py >"$LOG_DIR/$dir.log" 2>&1 &)
+    # exec: подоболочка сама становится сервером и не держит открытым вывод скрипта
+    (cd "$path" && exec nohup .venv/bin/python app.py >"$LOG_DIR/$dir.log" 2>&1 </dev/null) &
     echo "Запускаю: $title (порт $port)"
   done
 

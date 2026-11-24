@@ -5,12 +5,12 @@
 
 | Проект | Папка | Порт | Адрес |
 |---|---|---|---|
-| Lab 6 — Payment Aggregator | `lab06-singleton-factory-payments` | 5003 | http://127.0.0.1:5003 |
-| Lab 7 — Smart Game Store | `lab07-facade-proxy-game-store` | 5001 | http://127.0.0.1:5001 |
-| РК 1 — Online Shop | `rk1-decorator-online-shop` | 5002 | http://127.0.0.1:5002 |
-| Lab 12 — Student Management | `lab12-mvc-repository-students` | 5004 | http://127.0.0.1:5004 |
-| Lab 13 — Attendance | `lab13-observer-attendance` | — | файл `index.html` |
-| GameHub — итоговый проект | `final-project-gamehub` | 5005 | http://127.0.0.1:5005 |
+| Lab 6 — Payment Aggregator | `lab06` | 5003 | http://127.0.0.1:5003 |
+| Lab 7 — Smart Game Store | `lab07` | 5001 | http://127.0.0.1:5001 |
+| РК 1 — Online Shop | `rk1` | 5002 | http://127.0.0.1:5002 |
+| Lab 12 — Student Management | `lab12` | 5004 | http://127.0.0.1:5004 |
+| Lab 13 — Attendance | `lab13` | — | файл `index.html` |
+| GameHub — итоговый проект | `gamehub` | 5005 | http://127.0.0.1:5005 |
 
 ---
 
@@ -57,7 +57,7 @@ python3 -m venv .venv                         # только в первый р�
 ### Lab 6 — Payment Aggregator (Singleton + Factory Method)
 
 ```bash
-cd ~/Desktop/"Design Pattern/lab06-singleton-factory-payments"
+cd ~/Desktop/"Design Pattern/lab06"
 python3 -m venv .venv && .venv/bin/pip install -r requirements.txt   # первый раз
 .venv/bin/python app.py
 ```
@@ -67,7 +67,7 @@ http://127.0.0.1:5003. На главной странице есть форма 
 ### Lab 7 — Smart Game Store (Facade + Proxy)
 
 ```bash
-cd ~/Desktop/"Design Pattern/lab07-facade-proxy-game-store"
+cd ~/Desktop/"Design Pattern/lab07"
 python3 -m venv .venv && .venv/bin/pip install -r requirements.txt   # первый раз
 .venv/bin/python app.py
 ```
@@ -77,7 +77,7 @@ http://127.0.0.1:5001. Вход: `admin` / `admin123` (администрато�
 ### РК 1 — Online Shop (Decorator)
 
 ```bash
-cd ~/Desktop/"Design Pattern/rk1-decorator-online-shop"
+cd ~/Desktop/"Design Pattern/rk1"
 python3 -m venv .venv && .venv/bin/pip install -r requirements.txt   # первый раз
 .venv/bin/python app.py
 ```
@@ -87,7 +87,7 @@ http://127.0.0.1:5002
 ### Lab 12 — Student Management (MVC + Repository)
 
 ```bash
-cd ~/Desktop/"Design Pattern/lab12-mvc-repository-students"
+cd ~/Desktop/"Design Pattern/lab12"
 python3 -m venv .venv && .venv/bin/pip install -r requirements.txt   # первый раз
 .venv/bin/python app.py
 ```
@@ -99,20 +99,20 @@ http://127.0.0.1:5004
 Сервер не нужен — просто откройте файл в браузере:
 
 ```bash
-open ~/Desktop/"Design Pattern/lab13-observer-attendance/index.html"
+open ~/Desktop/"Design Pattern/lab13/index.html"
 ```
 
 ### GameHub — итоговый проект
 
 ```bash
-cd ~/Desktop/"Design Pattern/final-project-gamehub"
+cd ~/Desktop/"Design Pattern/gamehub"
 python3 -m venv .venv && .venv/bin/pip install -r requirements.txt   # первый раз
 .venv/bin/python app.py
 ```
 
 http://127.0.0.1:5005. Вход: `admin` / `admin123`, `student` / `student123` (можно зарегистрировать нового пользователя).
 
-Тесты, покрытие и проверка безопасности (из папки `final-project-gamehub`):
+Тесты, покрытие и проверка безопасности (из папки `gamehub`):
 
 ```bash
 .venv/bin/python -m unittest discover -s tests -t . -v
