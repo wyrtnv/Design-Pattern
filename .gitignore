@@ -9,3 +9,6 @@ __pycache__/
 
 # Node
 node_modules/
+
+# run_all.sh logs
+.run-logs/
