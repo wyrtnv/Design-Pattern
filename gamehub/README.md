@@ -275,6 +275,300 @@ users 1───* orders 1───* order_items *───1 products *───
 **Транзакции.** Заказ и все его позиции сохраняются в **одной** транзакции
 (`OrderRepository.create`): либо всё, либо ничего.
 
+### 6.1 SQL-запросы в терминале
+
+Отдельно ничего ставить не нужно: клиент `sqlite3` уже есть в macOS. Всё делается во
+встроенном терминале VS Code (**Terminal → New Terminal**).
+
+**Шаг 1. Перейти в папку проекта и открыть базу**
+
+```bash
+cd ~/Desktop/"Design Pattern/gamehub"
+sqlite3 gamehub.db
+```
+
+Появится приглашение `SQLite-3.54 gamehub.db->`: можно вводить команды.
+
+**Шаг 2. Включить вывод в виде таблицы** (один раз после открытия)
+
+```
+.mode box
+```
+
+**Шаг 3. Писать запросы.** Каждый SQL-запрос заканчивается `;`.
+
+```sql
+SELECT id, username, full_name, role FROM users;
+```
+
+```
+╭────┬──────────┬───────────────┬──────────╮
+│ id │ username │   full_name   │   role   │
+╞════╪══════════╪═══════════════╪══════════╡
+│  1 │ admin    │ GameHub Admin │ admin    │
+│  2 │ student  │ Demo Student  │ customer │
+╰────┴──────────┴───────────────┴──────────╯
+```
+
+**Шаг 4. Выйти** — `.quit` (или `Ctrl + D`).
+
+#### Шпаргалка
+
+| Что ввести | Что делает |
+|---|---|
+| `.tables` | список всех таблиц |
+| `.schema products` | как устроена таблица (`CREATE TABLE ...`) |
+| `.mode box` | красивый вывод таблицей |
+| `.quit` | выйти из sqlite3 |
+| `SELECT ... ;` | SQL-запрос: **всегда с `;` в конце** |
+
+> ⚠️ **Две частые ошибки**
+>
+> - Команды sqlite3 начинаются с **точки**: `.tables`. Если написать `/tables`, SQLite решит,
+>   что это начало SQL-запроса.
+> - Если вместо результата появилось `;->`, значит, SQLite ждёт окончания запроса.
+>   Введите `;` и нажмите Enter (или `Ctrl + C`, чтобы отменить ввод).
+
+**Запрос без входа в sqlite3** — одной строкой прямо в терминале:
+
+```bash
+sqlite3 -box gamehub.db "SELECT name, price FROM products ORDER BY price DESC LIMIT 3;"
+```
+
+**Все примеры ниже сразу** (они лежат в [database/queries.sql](database/queries.sql)):
+
+```bash
+sqlite3 -box gamehub.db < database/queries.sql
+```
+
+#### Примеры запросов
+
+Результаты получены на демо-базе `gamehub.db` из репозитория.
+
+**1. Простой SELECT с условием и сортировкой** — товары дешевле 50 000 ₸:
+
+```sql
+SELECT name, price, stock
+FROM products
+WHERE price < 50000
+ORDER BY price;
+```
+
+```
+╭─────────────────────┬─────────┬───────╮
+│        name         │  price  │ stock │
+╞═════════════════════╪═════════╪═══════╡
+│ Razer DeathAdder V3 │ 34990.0 │    20 │
+│ HyperX Cloud III    │ 44990.0 │     9 │
+╰─────────────────────┴─────────┴───────╯
+```
+
+**2. ORDER BY + LIMIT** — три самых дорогих товара:
+
+```sql
+SELECT name, price
+FROM products
+ORDER BY price DESC
+LIMIT 3;
+```
+
+```
+╭────────────────────────┬──────────╮
+│          name          │  price   │
+╞════════════════════════╪══════════╡
+│ Lenovo Legion 5 Pro    │ 899990.0 │
+│ ASUS ROG Strix G16     │ 749990.0 │
+│ Samsung Odyssey G5 27" │ 149990.0 │
+╰────────────────────────┴──────────╯
+```
+
+**3. JOIN двух таблиц** — товары категории Keyboards:
+
+```sql
+SELECT p.name, c.name AS category, p.price
+FROM products p
+JOIN categories c ON c.id = p.category_id
+WHERE c.name = 'Keyboards';
+```
+
+```
+╭──────────────────────┬───────────┬─────────╮
+│         name         │ category  │  price  │
+╞══════════════════════╪═══════════╪═════════╡
+│ Logitech G Pro X TKL │ Keyboards │ 69990.0 │
+│ Razer BlackWidow V4  │ Keyboards │ 89990.0 │
+╰──────────────────────┴───────────┴─────────╯
+```
+
+**4. JOIN заказов с покупателями:**
+
+```sql
+SELECT o.id, u.full_name, o.status, o.total
+FROM orders o
+JOIN users u ON u.id = o.user_id;
+```
+
+```
+╭────┬──────────────┬───────────┬──────────╮
+│ id │  full_name   │  status   │  total   │
+╞════╪══════════════╪═══════════╪══════════╡
+│  1 │ Demo Student │ DELIVERED │ 204970.0 │
+│  2 │ Demo Student │ CANCELLED │ 152990.0 │
+│  3 │ Demo Student │ PAID      │  44990.0 │
+╰────┴──────────────┴───────────┴──────────╯
+```
+
+**5. JOIN + вычисляемый столбец** — что лежит в заказе № 1 и сумма по строке:
+
+```sql
+SELECT oi.order_id, p.name, oi.quantity, oi.unit_price,
+       oi.quantity * oi.unit_price AS line_total
+FROM order_items oi
+JOIN products p ON p.id = oi.product_id
+WHERE oi.order_id = 1;
+```
+
+```
+╭──────────┬───────────────────────────────┬──────────┬────────────┬────────────╮
+│ order_id │             name              │ quantity │ unit_price │ line_total │
+╞══════════╪═══════════════════════════════╪══════════╪════════════╪════════════╡
+│        1 │ Logitech G Pro X TKL          │        2 │    69990.0 │   139980.0 │
+│        1 │ Logitech G Pro X Superlight 2 │        1 │    64990.0 │    64990.0 │
+╰──────────┴───────────────────────────────┴──────────┴────────────┴────────────╯
+```
+
+**6. JOIN трёх таблиц** — заказ, покупатель и платёж:
+
+```sql
+SELECT o.id, u.full_name, pay.method, pay.amount, pay.fee
+FROM orders o
+JOIN users u      ON u.id = o.user_id
+JOIN payments pay ON pay.order_id = o.id;
+```
+
+```
+╭────┬──────────────┬────────┬──────────┬─────────╮
+│ id │  full_name   │ method │  amount  │   fee   │
+╞════╪══════════════╪════════╪══════════╪═════════╡
+│  1 │ Demo Student │ paypal │ 204970.0 │ 6968.98 │
+│  2 │ Demo Student │ crypto │ 152990.0 │  1529.9 │
+│  3 │ Demo Student │ card   │  44990.0 │  674.85 │
+╰────┴──────────────┴────────┴──────────┴─────────╯
+```
+
+**7. LEFT JOIN + GROUP BY + COUNT / MIN / MAX** — сколько товаров в каждой категории.
+`LEFT JOIN` показывает и пустую категорию «Gaming chairs», обычный `JOIN` её бы скрыл:
+
+```sql
+SELECT c.name AS category,
+       COUNT(p.id)  AS products,
+       MIN(p.price) AS min_price,
+       MAX(p.price) AS max_price
+FROM categories c
+LEFT JOIN products p ON p.category_id = c.id
+GROUP BY c.id
+ORDER BY products DESC;
+```
+
+```
+╭───────────────┬──────────┬───────────┬───────────╮
+│   category    │ products │ min_price │ max_price │
+╞═══════════════╪══════════╪═══════════╪═══════════╡
+│ Laptops       │        2 │  749990.0 │  899990.0 │
+│ Keyboards     │        2 │   69990.0 │   89990.0 │
+│ Mice          │        2 │   34990.0 │   64990.0 │
+│ Headsets      │        2 │   44990.0 │   79990.0 │
+│ Monitors      │        2 │   79990.0 │  149990.0 │
+│ Gaming chairs │        0 │           │           │
+╰───────────────┴──────────┴───────────┴───────────╯
+```
+
+**8. CASE** — наличие товара словами:
+
+```sql
+SELECT name, stock,
+       CASE
+           WHEN stock = 0  THEN 'Нет в наличии'
+           WHEN stock <= 3 THEN 'Мало'
+           ELSE 'Есть'
+       END AS availability
+FROM products
+ORDER BY stock
+LIMIT 4;
+```
+
+```
+╭───────────────────────────┬───────┬──────────────╮
+│           name            │ stock │ availability │
+╞═══════════════════════════╪═══════╪══════════════╡
+│ Lenovo Legion 5 Pro       │     3 │ Мало         │
+│ Samsung Odyssey G5 27"    │     4 │ Есть         │
+│ ASUS ROG Strix G16        │     5 │ Есть         │
+│ SteelSeries Arctis Nova 7 │     6 │ Есть         │
+╰───────────────────────────┴───────┴──────────────╯
+```
+
+**9. CASE** — размер заказа по сумме:
+
+```sql
+SELECT id, status, total,
+       CASE
+           WHEN total >= 150000 THEN 'Крупный'
+           WHEN total >= 50000  THEN 'Средний'
+           ELSE 'Мелкий'
+       END AS size
+FROM orders;
+```
+
+```
+╭────┬───────────┬──────────┬─────────╮
+│ id │  status   │  total   │  size   │
+╞════╪═══════════╪══════════╪═════════╡
+│  1 │ DELIVERED │ 204970.0 │ Крупный │
+│  2 │ CANCELLED │ 152990.0 │ Крупный │
+│  3 │ PAID      │  44990.0 │ Мелкий  │
+╰────┴───────────┴──────────┴─────────╯
+```
+
+**10. Агрегаты + CASE внутри SUM** — статистика для дашборда (выручка без отменённых заказов):
+
+```sql
+SELECT COUNT(*) AS orders,
+       SUM(CASE WHEN status != 'CANCELLED' THEN total END) AS revenue,
+       ROUND(AVG(total)) AS avg_check
+FROM orders;
+```
+
+```
+╭────────┬──────────┬───────────╮
+│ orders │ revenue  │ avg_check │
+╞════════╪══════════╪═══════════╡
+│      3 │ 249960.0 │  134317.0 │
+╰────────┴──────────┴───────────╯
+```
+
+**11. GROUP BY** — сколько заказов в каждом статусе:
+
+```sql
+SELECT status, COUNT(*) AS count
+FROM orders
+GROUP BY status;
+```
+
+```
+╭───────────┬───────╮
+│  status   │ count │
+╞═══════════╪═══════╡
+│ CANCELLED │     1 │
+│ DELIVERED │     1 │
+│ PAID      │     1 │
+╰───────────┴───────╯
+```
+
+> Запросы `UPDATE`, `DELETE` и `INSERT` сразу меняют рабочую базу сайта. Чтобы вернуть
+> чистую базу: остановить сайт, удалить `gamehub.db` и снова запустить `app.py` —
+> база создастся заново с товарами и пользователями, но без демо-заказов.
+
 ## 7. CRUD и маршруты
 
 | Сущность | Create | Read | Update | Delete |

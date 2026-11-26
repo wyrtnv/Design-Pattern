@@ -120,6 +120,13 @@ http://127.0.0.1:5005. Вход: `admin` / `admin123`, `student` / `student123` 
 .venv/bin/bandit -r . -x ./.venv,./tests
 ```
 
+SQL-запросы к базе GameHub прямо в терминале (подробно, с примерами JOIN, CASE и GROUP BY — в [gamehub/README.md, раздел 6.1](gamehub/README.md#61-sql-запросы-в-терминале)):
+
+```bash
+sqlite3 gamehub.db                               # открыть базу, затем .mode box и запросы с ; в конце
+sqlite3 -box gamehub.db < database/queries.sql   # выполнить все примеры сразу
+```
+
 ---
 
 ## 3. Частые проблемы
